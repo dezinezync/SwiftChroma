@@ -73,18 +73,18 @@ public struct Chroma {
         var funcString = "chroma.scale([\(startJSString), \(endJSString)])"
         
         if mode != .rgb {
-            funcString += ".mode(\(mode.rawValue)"
+            funcString += ".mode(\"\(mode.rawValue)\")"
         }
         
         if correctLightness {
             funcString += ".correctLightness()"
         }
         
-        let _ = chromaContext?.evaluateScript("var output = \(funcString)")
+        let _ = run("var output = \(funcString)")
         
-        let compsString = "[...Array(\(steps))].map((_, i) => 1 + i * 1).map(n => output(n/\(steps))).map(c => c._rgb)"
+        let compsString = "[...Array(\(steps))].map((_, i) => (1 + i) * 1).map(n => output(n/\(steps))).map(c => c._rgb)"
         
-        guard let instances = chromaContext?.evaluateScript(compsString).toArray() as? [[Double]] else {
+        guard let instances = run(compsString)?.toArray() as? [[Double]] else {
             return []
         }
         
@@ -93,6 +93,12 @@ public struct Chroma {
         }
         
         return colors
+        
+    }
+    
+    static func run(_ command: String) -> JSValue? {
+        
+        return chromaContext?.evaluateScript(command)
         
     }
     
