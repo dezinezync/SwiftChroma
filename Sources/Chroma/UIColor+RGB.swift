@@ -7,13 +7,13 @@
 
 #if os(macOS)
 import Cocoa
-typealias SomeColor = NSColor
+public typealias SomeColor = NSColor
 #else
 import UIKit
-typealias SomeColor = UIColor
+public  typealias SomeColor = UIColor
 #endif
 
-extension SomeColor {
+public extension SomeColor {
     
     /// Returns the R,G,B and A channels from the color.
     /// - Parameter color: An instance of NSColor or UIColor

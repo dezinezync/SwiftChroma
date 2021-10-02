@@ -54,7 +54,7 @@ public struct Chroma {
     
     /// Chroma has different modes for scaling. See the documentation here:
     /// https://vis4.net/chromajs/#scale-mode
-    enum ScaleMode: String {
+    public enum ScaleMode: String {
         case rgb
         case lab
         case lch
@@ -62,7 +62,7 @@ public struct Chroma {
         case lrgb
     }
     
-    static func scale(_ start: SomeColor, _ end: SomeColor, steps: Int = 4, mode: Chroma.ScaleMode = .rgb, correctLightness: Bool = false) -> [SomeColor] {
+    static public func scale(_ start: SomeColor, _ end: SomeColor, steps: Int = 4, mode: Chroma.ScaleMode = .rgb, correctLightness: Bool = false) -> [SomeColor] {
         
         let startComps: [CGFloat] = start.getRGB()
         let endComps: [CGFloat] = end.getRGB()
@@ -89,7 +89,7 @@ public struct Chroma {
         }
         
         let colors = instances.map { instance in
-            return SomeColor(red: instance[0]/255, green: instance[1]/255, blue: instance[2]/255, alpha: instance[3]/255)
+            return SomeColor(red: instance[0]/255, green: instance[1]/255, blue: instance[2]/255, alpha: instance[3]/1)
         }
         
         return colors
