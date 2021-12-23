@@ -25,7 +25,13 @@ public extension SomeColor {
         var fBlue : CGFloat = 0
         var fAlpha: CGFloat = 0
         
-        getRed(&fRed, green: &fGreen, blue: &fBlue, alpha: &fAlpha)
+        var color = self
+        
+        #if os(macOS)
+        color = color.usingColorSpace(.deviceRGB) ?? color
+        #endif
+        
+        color.getRed(&fRed, green: &fGreen, blue: &fBlue, alpha: &fAlpha)
         
         return [fRed, fGreen, fBlue, fAlpha].map { $0 * 255 }
         
