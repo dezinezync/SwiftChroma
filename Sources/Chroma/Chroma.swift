@@ -16,7 +16,6 @@ import UIKit
 
 internal struct JavaScriptBridge {
     internal static func chromajs() -> String? {
-        
         let libPath = Bundle.module.path(forResource: "chroma", ofType: "js")
         
         guard let libPath = libPath else {
@@ -35,21 +34,17 @@ public struct Chroma {
 
     /// The internal JS Context Chroma will use to interface with chroma.js
     internal static let chromaContext: JSContext? = {
-        
         guard let chromajs = JavaScriptBridge.chromajs() else {
             return nil
         }
         
         let context = JSContext()
-        
         context?.exceptionHandler = { context, exception in
             print("[Chroma] chroma.js error: \(String(describing: exception))")
         }
-        
+    
         let _ = context?.evaluateScript(chromajs)
-        
         return context
-        
     }()
     
     /// Chroma has different modes for scaling. See the documentation here:
@@ -62,44 +57,8 @@ public struct Chroma {
         case lrgb
     }
     
-    static public func scale(_ start: SomeColor, _ end: SomeColor, steps: Int = 4, mode: Chroma.ScaleMode = .rgb, correctLightness: Bool = false) -> [SomeColor] {
-        
-        let startComps: [CGFloat] = start.getRGB()
-        let endComps: [CGFloat] = end.getRGB()
-        
-        let startJSString = "\"rgb(\(startComps[0..<3].map({ "\(Int($0))" }).joined(separator: ",")))\""
-        let endJSString = "\"rgb(\(endComps[0..<3].map({ "\(Int($0))" }).joined(separator: ",")))\""
-        
-        var funcString = "chroma.scale([\(startJSString), \(endJSString)])"
-        
-        if mode != .rgb {
-            funcString += ".mode(\"\(mode.rawValue)\")"
-        }
-        
-        if correctLightness {
-            funcString += ".correctLightness()"
-        }
-        
-        let _ = run("var output = \(funcString)")
-        
-        let compsString = "[...Array(\(steps))].map((_, i) => (1 + i) * 1).map(n => output(n/\(steps))).map(c => c._rgb)"
-        
-        guard let instances = run(compsString)?.toArray() as? [[Double]] else {
-            return []
-        }
-        
-        let colors = instances.map { instance in
-            return SomeColor(red: instance[0]/255, green: instance[1]/255, blue: instance[2]/255, alpha: instance[3]/1)
-        }
-        
-        return colors
-        
-    }
-    
-    static func run(_ command: String) -> JSValue? {
-        
-        return chromaContext?.evaluateScript(command)
-        
+    static internal func run(_ command: String) -> JSValue? {
+        chromaContext?.evaluateScript(command)
     }
     
 }
