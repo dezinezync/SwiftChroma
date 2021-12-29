@@ -27,5 +27,11 @@ class ChromaTemperatureTests: XCTestCase {
         XCTAssertNotNil(color)
         XCTAssertEqual(color?.getRGB(), [225.2605240191799, 232.30881312066407, 255.0, 255.0])
     }
+    
+    func testInvalidTemperature() {
+        let color = Chroma.temperature(1000000)
+        XCTAssertNotNil(color)
+        XCTAssertEqual(color?.getRGB(), [255.0, 255.0, 255.0, 255.0])
+    }
 
 }

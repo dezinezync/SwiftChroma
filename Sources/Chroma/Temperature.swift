@@ -8,7 +8,7 @@
 import Foundation
 
 extension Chroma {
-    static public func temperature(_ value: Int) -> SomeColor? {
+    static public func temperature(_ value: UInt) -> SomeColor? {
         let funcString = "chroma.temperature(\(value))._rgb"
         guard let comp = run("\(funcString)")?.toArray() as? [Double] else {
             return nil
