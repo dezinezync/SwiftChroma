@@ -18,8 +18,8 @@ extension Chroma {
     /// - Returns: list of colours for the scale. If any errors are encountered, an empty list is returned.
     static public func scale(_ start: SomeColor, _ end: SomeColor, steps: Int = 4, mode: Chroma.ScaleMode = .rgb, correctLightness: Bool = false) -> [SomeColor] {
         
-        let startComps: [CGFloat] = start.getRGB()
-        let endComps: [CGFloat] = end.getRGB()
+        let startComps: [Double] = start.getRGB()
+        let endComps: [Double] = end.getRGB()
         
         let startJSString = "\"rgb(\(startComps[0..<3].map({ "\(Int($0))" }).joined(separator: ",")))\""
         let endJSString = "\"rgb(\(endComps[0..<3].map({ "\(Int($0))" }).joined(separator: ",")))\""
